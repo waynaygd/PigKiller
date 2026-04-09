@@ -1,3 +1,4 @@
-﻿  pigkillerfromzero.cpp
-C:\Users\wayna\source\repos\pigkillerfromzero\pigkillerfromzero\pigkillerfromzero.cpp(149,6): warning C4101: user_choice: неиспользованная локальная переменная
-  pigkillerfromzero.vcxproj -> C:\Users\wayna\source\repos\pigkillerfromzero\x64\Debug\pigkillerfromzero.exe
+﻿  asciirenderer.cpp
+  pigkillerfromzero.vcxproj -> D:\PigKiller\x64\Debug\pigkillerfromzero.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.
