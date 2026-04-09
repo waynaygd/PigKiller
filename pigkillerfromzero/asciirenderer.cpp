@@ -171,13 +171,44 @@ std::vector<std::string> CP_AsciiRenderer::ParseLinesArrayFromJson(const std::st
     }
 
     const std::size_t ArrayStart = JsonText.find('[', KeyPos);
-    const std::size_t ArrayEnd = JsonText.find(']', ArrayStart);
-    if (ArrayStart == std::string::npos || ArrayEnd == std::string::npos || ArrayEnd <= ArrayStart) {
+    if (ArrayStart == std::string::npos) {
         return Result;
     }
 
+    std::size_t ArrayEnd = std::string::npos;
     bool InString = false;
     bool Escaping = false;
+
+    for (std::size_t i = ArrayStart + 1; i < JsonText.size(); i++) {
+        const char Ch = JsonText[i];
+
+        if (Escaping) {
+            Escaping = false;
+            continue;
+        }
+
+        if (Ch == '\\') {
+            Escaping = true;
+            continue;
+        }
+
+        if (Ch == '"') {
+            InString = !InString;
+            continue;
+        }
+
+        if (!InString && Ch == ']') {
+            ArrayEnd = i;
+            break;
+        }
+    }
+
+    if (ArrayEnd == std::string::npos || ArrayEnd <= ArrayStart) {
+        return Result;
+    }
+
+    InString = false;
+    Escaping = false;
     std::string Current;
 
     for (std::size_t i = ArrayStart + 1; i < ArrayEnd; i++) {
