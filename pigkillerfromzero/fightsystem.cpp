@@ -3,6 +3,8 @@
 #include <ctime>
 #include "menubasefunctions.h"
 #include "fightsystem.h"
+#include "asciirenderer.h"
+#include "consoleutils.h"
 
 const int SIZE = 2;
 int toattack[SIZE];
@@ -185,8 +187,8 @@ void FightSystem::FS_StartFight(CP_Player& player, CP_LevelBase* level)
     if (player.Player_GetPTSize() == 0) {
         system("cls");
         std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-        std::cout << "Сначала выберите бойцов!" << std::endl << std::endl;
-        system("pause");
+        std::cout << "Pick your fighters first!" << std::endl << std::endl;
+        CP_PauseForContinue();
         P_BackToPigBase();
     }
     else {
@@ -208,7 +210,7 @@ void FightSystem::FS_StartFight(CP_Player& player, CP_LevelBase* level)
 
         FS_FightUI(player, level);
 
-        system("pause");
+        CP_PauseForContinue();
     }
 }
 
@@ -223,7 +225,7 @@ void FightSystem::FS_AttackByPig(CP_Player& player, CP_LevelBase* level, int CP_
         }
     }
     else if (level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == false) {
-        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " мертв!" << std::endl;
+        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " is dead!" << std::endl;
         FS_FightUI(player, level);
     }
 }
@@ -247,23 +249,23 @@ void FightSystem::FS_AttackByWolf(CP_Player& player, CP_LevelBase* level, int CP
 void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC) {
     int UserAction;
 
-    std::cout << "Ваша свинка: " << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << std::endl << std::endl;
+    std::cout << "Your pig: " << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << std::endl << std::endl;
 
-    std::cout << "Злостный волк: " << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << std::endl << std::endl;
+    std::cout << "Enemy wolf: " << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << std::endl << std::endl;
 
-    std::cout << "1. Ударить" << std::endl;
-    std::cout << "2. Удар с DD (вероятность удара: " << player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5 << "%)" << std::endl << std::endl;
+    std::cout << "1. Attack" << std::endl;
+    std::cout << "2. Double damage attack (chance: " << player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5 << "%)" << std::endl << std::endl;
 
-    std::cout << "Выберите действие: ";
+    std::cout << "Choose an action: ";
     std::cin >> UserAction;
     std::cout << std::endl;
 
     if (UserAction == 1 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
         FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
-        std::cout << "Вы успешно ударили " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
+        std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
 
-        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " имеет сейчас " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " единиц здоровья." << std::endl << std::endl;
-        system("pause");
+        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+        CP_PauseForContinue();
         player.Player_SetTurn(false);
         FS_FightUI(player, level);
     }
@@ -271,18 +273,18 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
         CP_RanGenDDChance();
         if (DD[0] < player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
             FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
-            std::cout << "Вы успешно ударили " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
+            std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
 
-            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " имеет сейчас " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " единиц здоровья." << std::endl << std::endl;
-            system("pause");
+            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+            CP_PauseForContinue();
             player.Player_SetTurn(false);
             FS_FightUI(player, level);
         }
         if (DD[0] > player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
-            std::cout << "DD не прошёл, вы нанесли 0 урона." << std::endl;
+            std::cout << "Double damage failed, you dealt 0 damage." << std::endl;
 
-            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " имеет сейчас " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " единиц здоровья." << std::endl << std::endl;
-            system("pause");
+            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+            CP_PauseForContinue();
             player.Player_SetTurn(false);
             FS_FightUI(player, level);
         }
@@ -294,24 +296,25 @@ void FightSystem::FS_BotAttacks(CP_Player& player, CP_LevelBase* level) {
         CP_RanGenBotToAttack();
     }
 
-    std::cout << "Злостный волк: " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << std::endl << std::endl;
+    std::cout << "Enemy wolf: " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << std::endl << std::endl;
 
-    std::cout << "Ваша свинка: " << player.Player_GetTeamBot(toattack[1])->Character_GetName() << std::endl << std::endl;
+    std::cout << "Your pig: " << player.Player_GetTeamBot(toattack[1])->Character_GetName() << std::endl << std::endl;
 
     FS_AttackByWolf(player, level, toattack[0], toattack[1]);
     if (hitc[0] >= level->Level_GetTeamBot(toattack[1])->Character_GetCHit()) {
-        std::cout << "Злостный волк " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " атакует!" << std::endl;
-        std::cout << "Ваша свинка " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " получила " << level->Level_GetTeamBot(toattack[0])->Character_GetItemFINV(0)->Item_GetDMG() << " единиц урона" << std::endl;
-        std::cout << "Единиц здоровья осталось: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
+        std::cout << "Enemy wolf " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " attacks!" << std::endl;
+        GP_AsciiRenderer.RenderScene("battle_left_right");
+        std::cout << "Your pig " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " received " << level->Level_GetTeamBot(toattack[0])->Character_GetItemFINV(0)->Item_GetDMG() << " damage" << std::endl;
+        std::cout << "Health remaining: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
     }
 
     if (hitc[0] < level->Level_GetTeamBot(toattack[1])->Character_GetCHit()) {
-        std::cout << "Злостный волк " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " промахнулся!" << std::endl;
-        std::cout << "Ваша свинка " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " не получила урона" << std::endl;
-        std::cout << "Единиц здоровья осталось: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
+        std::cout << "Enemy wolf " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " missed!" << std::endl;
+        std::cout << "Your pig " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " received no damage" << std::endl;
+        std::cout << "Health remaining: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
     }
 
-    system("pause");
+    CP_PauseForContinue();
     player.Player_SetTurn(true);
     FS_FightUI(player, level);
 }
@@ -328,35 +331,35 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
     if (FS_PlayerTeamWin == false and FS_BotTeamWin == false) {
         std::cout << "<- Pig Killer ->" << std::endl << std::endl;
         if (player.Player_GetTurn() == true) {
-            std::cout << "Ваша банда: " << std::endl;
+            std::cout << "Your gang: " << std::endl;
             for (int i = 0; i < player.Player_GetPTSize(); i++) {
-                std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | Оружие: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " с уроном: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | Weapon: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
             }
 
             std::cout << std::endl;
-            std::cout << "Выберите свинью, которой вы хотите нанести урон по вражескому волку: ";
+            std::cout << "Choose a pig to attack an enemy wolf: ";
             std::cin >> player_choice;
 
             while (player.Player_GetTeamBot(player_choice - 1)->Character_GetIsAlive() == false) {
-                std::cout << "К сожалению, эта свинья мертва, выберите другую: ";
+                std::cout << "This pig is dead, choose another one: ";
                 std::cin >> player_choice;
             }
 
             system("cls");
             std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
-            std::cout << "Банда волков: " << std::endl;
+            std::cout << "Wolf gang: " << std::endl;
             for (int i = 0; i < level->Level_GetWolfTeamSize(); i++) {
-                std::cout << i + 1 << ". " << level->Level_GetTeamBot(i)->Character_GetName() << " [" << level->Level_GetTeamBot(i)->Character_GetCHP() << "/" << level->Level_GetTeamBot(i)->Character_GetHP() << "] | Оружие: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " с уроном: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                std::cout << i + 1 << ". " << level->Level_GetTeamBot(i)->Character_GetName() << " [" << level->Level_GetTeamBot(i)->Character_GetCHP() << "/" << level->Level_GetTeamBot(i)->Character_GetHP() << "] | Weapon: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
             }
 
             std::cout << std::endl;
-            std::cout << "Выберите волка, которому хотите нанести урон: ";
+            std::cout << "Choose a wolf to attack: ";
             std::cin >> player_wolf_choice;
             std::cout << std::endl;
 
             while (level->Level_GetTeamBot(player_wolf_choice - 1)->Character_GetIsAlive() == false) {
-                std::cout << "К счастью, этот волк мертв, выберите другого: ";
+                std::cout << "That wolf is already dead, choose another one: ";
                 std::cin >> player_wolf_choice;
             }
 
@@ -497,11 +500,11 @@ void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
             }
 
             std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-            std::cout << "Поздравляю! Вы зачистили локацию " << level->Level_GetName() << " от волков! В награду вы получаете " << coins[0] << " желудей в свой кошелёк!" << std::endl;
-            std::cout << "Также вы получаете " << level->Level_GetEXP() << " единиц опыта, которые можно использовать для прокачки ваших свинов" << std::endl << std::endl;
-            std::cout << "К вашей команде примкнули: " << std::endl;
+            std::cout << "Congratulations! You cleared location " << level->Level_GetName() << " from wolves! As a reward you get " << coins[0] << " acorns in your wallet!" << std::endl;
+            std::cout << "You also get " << level->Level_GetEXP() << " experience points that can be used to upgrade your pigs" << std::endl << std::endl;
+            std::cout << "New members joined your team: " << std::endl;
             for (int i = -2 + (level->Level_GetID() * 2); i < player.Player_GetAvailableSize(); i++) {
-                std::cout << player.Player_GetAvailableBot(i)->Character_GetName() << " / Количество здоровья: " << player.Player_GetAvailableBot(i)->Character_GetHP() << " / Оружие в арсенале: " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetName() << " с уроном " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                std::cout << player.Player_GetAvailableBot(i)->Character_GetName() << " / HP: " << player.Player_GetAvailableBot(i)->Character_GetHP() << " / Weapon in inventory: " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
             }
 
             player.Player_AddToBalance(coins[0]);
@@ -515,7 +518,7 @@ void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
             player.Character_GainEXP(level->Level_GetEXP());
 
             std::cout << std::endl;
-            system("pause");
+            CP_PauseForContinue();
             system("cls");
             for (int i = 0; i < player.Player_GetPTSize(); i++) {
                 player.Player_GetTeamBot(i)->Character_SetCHP(player.Player_GetTeamBot(i)->Character_GetHP());
@@ -535,7 +538,7 @@ void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
             system("cls");
             CP_RanGenMoney();
             std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-            std::cout << "Вы проиграли! Это ужасно, локация " << level->Level_GetName() << " всё ещё под контролем волков! Вы получаете " << (coins[0] * 0, 25) << " желудей в свой кошелёк!" << std::endl;
+            std::cout << "You lost! This is terrible, location " << level->Level_GetName() << " is still under wolf control! You receive " << (coins[0] * 0, 25) << " acorns in your wallet!" << std::endl;
 
             player.Player_AddToBalance((coins[0] * 0, 5));
             FS_PlayerTeamWin = false;
@@ -543,7 +546,7 @@ void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
             player.Player_SetTurn(false);
             level->Level_WolfTeamClear();
 
-            system("pause");
+            CP_PauseForContinue();
             system("cls");
 
             for (int i = 0; i < player.Player_GetPTSize(); i++) {

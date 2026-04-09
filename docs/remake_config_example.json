@@ -1,0 +1,64 @@
+{
+  "characters": [
+    {
+      "id": "pig_leader",
+      "displayName": "Chief Pig",
+      "baseStats": {
+        "hp": 120,
+        "attack": 14,
+        "defense": 6
+      },
+      "startingWeaponId": "katana_t1",
+      "startingArmorId": "leather_vest_t1"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "katana_t1",
+      "displayName": "Katana",
+      "tier": 1,
+      "price": 120,
+      "upgrades": [
+        {
+          "id": "katana_edge_polish",
+          "displayName": "Blade Polish",
+          "cost": 45,
+          "stats": { "attack": 2 },
+          "requiredLevel": 2
+        }
+      ]
+    }
+  ],
+  "armor": [
+    {
+      "id": "leather_vest_t1",
+      "displayName": "Leather Vest",
+      "tier": 1,
+      "price": 80,
+      "flatReduction": 2,
+      "percentReduction": 0.05
+    }
+  ],
+  "asciiScenes": {
+    "base_tavern_interior": [
+      "      (\\_/)",
+      "     (o.o )   Welcome to the tavern!",
+      "      > ^ <"
+    ],
+    "travel_map": [
+      "[BASE]* -- [FOREST] -- [WOLF BASE](locked)",
+      "    \\",
+      "    [BANK](unlocked)"
+    ],
+    "upgrade_party_overview": [
+      "[1] Chief Pig      W: Katana  A: Leather Vest",
+      "[2] Fighter #2     W: Mace    A: None",
+      "[3] Fighter #3     W: Axe     A: None",
+      "[4] Fighter #4     W: Crossbow A: None"
+    ],
+    "battle_left_right": [
+      "PLAYER GANG                     ENEMY GANG",
+      "[Pig][Pig][Pig]                 [Wolf][Wolf][Wolf]"
+    ]
+  }
+}

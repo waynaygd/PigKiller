@@ -2,13 +2,17 @@
 #include <vector>
 #include <string>
 #include "levelbank.h"
+#include "consoleutils.h"
 
-std::vector <std::string> DialogueStartBank = { "- Ты мне свою туфту не неси! У нас в Волковске такую низкую ставку на 10 лет никто не предлагает! НА-ДУ-ВА-ТЕЛЬ-СТВО",
-"*звук пробития стекла и последовательного тыкания острым предметом в тело*", "- Свины на подходе, всем быть готовым!"
+std::vector<std::string> DialogueStartBank = {
+    "- Welcome to the acorn bank. Keep your winnings safe.",
+    "- Paperwork first, jokes later.",
+    "- Don't lose this place to wolves."
 };
 
-std::vector <std::string> DialogueAfterBank = { "- Здравствуйте, я консультант СвинБанка Валерий, хочу узнать номер вашего счёта и секретный пароль, чтобы отдать все деньги вашим детям после вашей кончины, которая наступит...",
-"...", "- Прямо сейчас!", "*звук убийства волка*", "- Спасибо, что воспользовались услугами СвинБанка, не будем ждать вас ещё!"
+std::vector<std::string> DialogueAfterBank = {
+    "- Your account is in good shape.",
+    "- Earn more, spend wisely, and come back stronger."
 };
 
 void CP_LevelBank::Level_Gameplay()
@@ -19,7 +23,7 @@ void CP_LevelBank::Level_Gameplay()
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueStartBank[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 }
 
@@ -31,6 +35,6 @@ void CP_LevelBank::Level_AfterGameplay()
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueAfterBank[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 }

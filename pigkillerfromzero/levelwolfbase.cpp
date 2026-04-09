@@ -2,9 +2,13 @@
 #include <vector>
 #include <string>
 #include "levelwolfbase.h"
+#include "consoleutils.h"
 
-std::vector <std::string> DialogueWolfBase = { "- Ну вот и пришло время для последней битвы, Волков!", "- Вы, малолетние доблесные бойцы! Вы ещё глупы, чтобы понять одну вещь...",
-"- И какую же?", "- Что я вас отвлекаю! В АТАКУ ВОЛКИ!"
+std::vector<std::string> DialogueWolfBase = {
+    "- So, you finally reached the Wolf Base.",
+    "- Turn back now, or be torn apart.",
+    "- We are done running.",
+    "- Then come and face the Wolf King!"
 };
 
 void CP_LevelWolfBase::Level_Gameplay()
@@ -15,6 +19,6 @@ void CP_LevelWolfBase::Level_Gameplay()
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueWolfBase[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 }

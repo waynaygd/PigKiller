@@ -5,6 +5,9 @@
 #include <shellapi.h>
 #include "menubasefunctions.h"
 #include "fightsystem.h"
+#include "asciirenderer.h"
+#include "localization.h"
+#include "consoleutils.h"
 
 CP_Player Player;
 FightSystem GP_Fight;
@@ -13,14 +16,15 @@ TravelSystem GP_Travel;
 int user_menuchoice;
 
 void mainmenu() {
+	GP_AsciiRenderer.RenderScene("main_menu");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
-	std::cout << "- 1. Начать игру - \n";
-	std::cout << "- 2. Смешная кнопка - \n";
-	std::cout << "- 3. Tитры - \n";
-	std::cout << "- 4. Выход - \n \n";
+	std::cout << CP_Localization::L("menu.start_game") << "\n";
+	std::cout << CP_Localization::L("menu.funny_button") << "\n";
+	std::cout << CP_Localization::L("menu.credits") << "\n";
+	std::cout << CP_Localization::L("menu.exit") << "\n \n";
 
-	std::cout << "- Выберите опцию: ";
+	std::cout << CP_Localization::L("menu.choose_option");
 	std::cin >> user_menuchoice;
 	menuaction(user_menuchoice);
 }
@@ -28,20 +32,21 @@ void mainmenu() {
 void GP_PigBase() {
 	int player_action;
 
+	GP_AsciiRenderer.RenderScene("base_tavern_interior");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-	std::cout << "- 1. Отправиться на битву - \n";
-	std::cout << "- 2. Поменять члена команды - \n";
-	std::cout << "- 3. Прокачать членов команды - \n";
-	std::cout << "- 4. Сменить оружие себе или членам команды - \n\n";
+	std::cout << CP_Localization::L("base.go_battle") << "\n";
+	std::cout << CP_Localization::L("base.change_team") << "\n";
+	std::cout << CP_Localization::L("base.upgrade_team") << "\n";
+	std::cout << CP_Localization::L("base.change_weapon") << "\n\n";
 
-	std::cout << "- Выберите опцию: ";
+	std::cout << CP_Localization::L("menu.choose_option");
 	std::cin >> player_action;
 
 	switch (player_action) {
 	case 1:
 		system("cls");
 		GP_Travel.TS_UITravel(Player);
-		system("pause");
+		CP_PauseForContinue();
 		GP_Travel.TS_GetLevel(Player.Player_GetCurrentLocation())->Level_Gameplay();
 		GP_Fight.FS_StartFight(Player, GP_Travel.TS_GetLevel(Player.Player_GetCurrentLocation()));
 		break;
@@ -82,8 +87,8 @@ void P_BackToPigBase() {
 }
 
 void P_GameEnding() {
-	std::vector <std::string> DialogueEnd = { "Волчий король пал!", "Главный свин и его отважная банда стала героями не только деревни, но близ лежащих городов!",
-		"Свиной король лично приехал в деревню, чтобы поблагодарить главу за его отвагу и честь", "С тех пор жили они долго и счастливо..."
+	std::vector <std::string> DialogueEnd = { CP_Localization::L("ending.win.1"), CP_Localization::L("ending.win.2"),
+		CP_Localization::L("ending.win.3"), CP_Localization::L("ending.win.4")
 	};
 
 	int vector_index = 0;
@@ -92,14 +97,14 @@ void P_GameEnding() {
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueEnd[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 	exit(true);
 }
 
 void P_GameEndingBegin() {
-	std::vector <std::string> DialogueBegin = { "Банда не справилась с натиском в кабаке...", "О какой защите деревни может быть и речь?",
-	"Волчий король отдал приказ нападения на вашу базу, свины пытались отбиться, но ничего не вышло...", "Вы предали нас всех."
+	std::vector <std::string> DialogueBegin = { CP_Localization::L("ending.lose.1"), CP_Localization::L("ending.lose.2"),
+	CP_Localization::L("ending.lose.3"), CP_Localization::L("ending.lose.4")
 	};
 
 	int vector_index = 0;
@@ -108,7 +113,7 @@ void P_GameEndingBegin() {
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueBegin[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 	exit(true);
 }
@@ -158,8 +163,8 @@ void menuaction(int user_menuchoice) {
 		exit(true);
 	case 3:
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-		std::cout << "Автор кода, нарратива и геймдизайна: Тимофей Журавлев" << std::endl;
-		system("pause");
+		std::cout << CP_Localization::L("credits.author") << std::endl;
+		CP_PauseForContinue();
 		backtomainmenu();
 		break;
 	case 4:
@@ -176,7 +181,7 @@ void backtomainmenu()
 }
 
 int main() {
-	setlocale(LC_ALL, "Russian");
+	setlocale(LC_ALL, "C");
 	mainmenu();
 
 	return 0;
