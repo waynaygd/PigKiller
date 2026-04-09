@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "asciirenderer.h"
 
 CP_AsciiRenderer GP_AsciiRenderer;
@@ -51,5 +52,29 @@ void CP_AsciiRenderer::RenderScene(const std::string& SceneKey) const
     for (const std::string& SceneLine : Scene->second) {
         std::cout << SceneLine << std::endl;
     }
+    std::cout << "==============================================" << std::endl << std::endl;
+}
+
+void CP_AsciiRenderer::RenderBattleScene(int SelectedPig, int SelectedWolf) const
+{
+    auto BuildTeamLine = [](const std::string& Name, int SelectedIndex) {
+        std::string Result;
+        for (int i = 0; i < 3; i++) {
+            if (i == SelectedIndex) {
+                Result += "\033[1m[" + Name + "]\033[0m";
+            }
+            else {
+                Result += "[" + Name + "]";
+            }
+        }
+        return Result;
+    };
+
+    std::string PigLine = BuildTeamLine("Pig", SelectedPig);
+    std::string WolfLine = BuildTeamLine("Wolf", SelectedWolf);
+
+    std::cout << "==============================================" << std::endl;
+    std::cout << " PLAYER GANG                     WOLF GANG " << std::endl;
+    std::cout << " " << std::left << std::setw(29) << PigLine << " " << WolfLine << std::endl;
     std::cout << "==============================================" << std::endl << std::endl;
 }
