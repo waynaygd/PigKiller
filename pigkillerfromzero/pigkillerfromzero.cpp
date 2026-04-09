@@ -6,6 +6,7 @@
 #include "menubasefunctions.h"
 #include "fightsystem.h"
 #include "asciirenderer.h"
+#include "localization.h"
 
 CP_Player Player;
 FightSystem GP_Fight;
@@ -17,12 +18,12 @@ void mainmenu() {
 	GP_AsciiRenderer.RenderScene("main_menu");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
-	std::cout << "- 1. Начать игру - \n";
-	std::cout << "- 2. Смешная кнопка - \n";
-	std::cout << "- 3. Tитры - \n";
-	std::cout << "- 4. Выход - \n \n";
+	std::cout << CP_Localization::L("menu.start_game") << "\n";
+	std::cout << CP_Localization::L("menu.funny_button") << "\n";
+	std::cout << CP_Localization::L("menu.credits") << "\n";
+	std::cout << CP_Localization::L("menu.exit") << "\n \n";
 
-	std::cout << "- Выберите опцию: ";
+	std::cout << CP_Localization::L("menu.choose_option");
 	std::cin >> user_menuchoice;
 	menuaction(user_menuchoice);
 }
@@ -32,12 +33,12 @@ void GP_PigBase() {
 
 	GP_AsciiRenderer.RenderScene("base_tavern_interior");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-	std::cout << "- 1. Отправиться на битву - \n";
-	std::cout << "- 2. Поменять члена команды - \n";
-	std::cout << "- 3. Прокачать членов команды - \n";
-	std::cout << "- 4. Сменить оружие себе или членам команды - \n\n";
+	std::cout << CP_Localization::L("base.go_battle") << "\n";
+	std::cout << CP_Localization::L("base.change_team") << "\n";
+	std::cout << CP_Localization::L("base.upgrade_team") << "\n";
+	std::cout << CP_Localization::L("base.change_weapon") << "\n\n";
 
-	std::cout << "- Выберите опцию: ";
+	std::cout << CP_Localization::L("menu.choose_option");
 	std::cin >> player_action;
 
 	switch (player_action) {
@@ -85,8 +86,8 @@ void P_BackToPigBase() {
 }
 
 void P_GameEnding() {
-	std::vector <std::string> DialogueEnd = { "Волчий король пал!", "Главный свин и его отважная банда стала героями не только деревни, но близ лежащих городов!",
-		"Свиной король лично приехал в деревню, чтобы поблагодарить главу за его отвагу и честь", "С тех пор жили они долго и счастливо..."
+	std::vector <std::string> DialogueEnd = { CP_Localization::L("ending.win.1"), CP_Localization::L("ending.win.2"),
+		CP_Localization::L("ending.win.3"), CP_Localization::L("ending.win.4")
 	};
 
 	int vector_index = 0;
@@ -101,8 +102,8 @@ void P_GameEnding() {
 }
 
 void P_GameEndingBegin() {
-	std::vector <std::string> DialogueBegin = { "Банда не справилась с натиском в кабаке...", "О какой защите деревни может быть и речь?",
-	"Волчий король отдал приказ нападения на вашу базу, свины пытались отбиться, но ничего не вышло...", "Вы предали нас всех."
+	std::vector <std::string> DialogueBegin = { CP_Localization::L("ending.lose.1"), CP_Localization::L("ending.lose.2"),
+	CP_Localization::L("ending.lose.3"), CP_Localization::L("ending.lose.4")
 	};
 
 	int vector_index = 0;
@@ -161,7 +162,7 @@ void menuaction(int user_menuchoice) {
 		exit(true);
 	case 3:
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-		std::cout << "Автор кода, нарратива и геймдизайна: Тимофей Журавлев" << std::endl;
+		std::cout << CP_Localization::L("credits.author") << std::endl;
 		system("pause");
 		backtomainmenu();
 		break;
@@ -179,7 +180,7 @@ void backtomainmenu()
 }
 
 int main() {
-	setlocale(LC_ALL, "Russian");
+	setlocale(LC_ALL, "C");
 	mainmenu();
 
 	return 0;

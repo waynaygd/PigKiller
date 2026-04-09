@@ -137,6 +137,7 @@
     <ClCompile Include="levelpigbase.cpp" />
     <ClCompile Include="levelshop.cpp" />
     <ClCompile Include="levelwolfbase.cpp" />
+    <ClCompile Include="localization.cpp" />
     <ClCompile Include="pigkillerfromzero.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="shop.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="levelpigbase.h" />
     <ClInclude Include="levelshop.h" />
     <ClInclude Include="levelwolfbase.h" />
+    <ClInclude Include="localization.h" />
     <ClInclude Include="menubasefunctions.h" />
     <ClInclude Include="pig.h" />
     <ClInclude Include="player.h" />

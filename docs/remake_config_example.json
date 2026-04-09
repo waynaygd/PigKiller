@@ -2,7 +2,7 @@
   "characters": [
     {
       "id": "pig_leader",
-      "displayName": "Главный Свин",
+      "displayName": "Chief Pig",
       "baseStats": {
         "hp": 120,
         "attack": 14,
@@ -15,13 +15,13 @@
   "weapons": [
     {
       "id": "katana_t1",
-      "displayName": "Катана",
+      "displayName": "Katana",
       "tier": 1,
       "price": 120,
       "upgrades": [
         {
           "id": "katana_edge_polish",
-          "displayName": "Полировка лезвия",
+          "displayName": "Blade Polish",
           "cost": 45,
           "stats": { "attack": 2 },
           "requiredLevel": 2
@@ -32,7 +32,7 @@
   "armor": [
     {
       "id": "leather_vest_t1",
-      "displayName": "Кожаный жилет",
+      "displayName": "Leather Vest",
       "tier": 1,
       "price": 80,
       "flatReduction": 2,
@@ -42,23 +42,23 @@
   "asciiScenes": {
     "base_tavern_interior": [
       "      (\\_/)",
-      "     (o.o )   Добро пожаловать в кабак!",
+      "     (o.o )   Welcome to the tavern!",
       "      > ^ <"
     ],
     "travel_map": [
-      "[БАЗА]* -- [ЛЕС] -- [ВОЛЧЬЯ БАЗА](locked)",
+      "[BASE]* -- [FOREST] -- [WOLF BASE](locked)",
       "    \\",
-      "    [БАНК](unlocked)"
+      "    [BANK](unlocked)"
     ],
     "upgrade_party_overview": [
-      "[1] Главный Свин   W: Катана  A: Кожаный жилет",
-      "[2] Боец #2        W: Булава  A: Нет",
-      "[3] Боец #3        W: Топор   A: Нет",
-      "[4] Боец #4        W: Арбалет A: Нет"
+      "[1] Chief Pig      W: Katana  A: Leather Vest",
+      "[2] Fighter #2     W: Mace    A: None",
+      "[3] Fighter #3     W: Axe     A: None",
+      "[4] Fighter #4     W: Crossbow A: None"
     ],
     "battle_left_right": [
-      "БАНДА ИГРОКА                    ВРАЖЕСКАЯ БАНДА",
-      "[Свин][Свин][Свин]              [Волк][Волк][Волк]"
+      "PLAYER GANG                     ENEMY GANG",
+      "[Pig][Pig][Pig]                 [Wolf][Wolf][Wolf]"
     ]
   }
 }

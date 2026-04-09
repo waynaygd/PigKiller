@@ -40,10 +40,10 @@ void CP_Player::Player_ChangeBandUI()
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 	for (int i = 0; i < Player_Team.size(); i++) {
 	GP_AsciiRenderer.RenderScene("upgrade_party_overview");
-		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / Êîëè÷åñòâî çäîðîâüÿ: " << Player_Team[i]->Character_GetHP() << " / Îðóæèå: "  << Player_Team[i]->Character_GetItemFINV(0)->Item_GetName() << " ñ óðîíîì: " << Player_Team[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / HP: " << Player_Team[i]->Character_GetHP() << " / Weapon: "  << Player_Team[i]->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << Player_Team[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
 	}
-	std::cout << "0. Íó âäðóã, âû ïåðåäóìàëè âûáèðàòü áîéöà" << std::endl << std::endl;
-	std::cout << "Âûáåðèòå áîéöà, êîòîðîãî âû áû õîòåëè ïîìåíÿòü: ";
+	std::cout << "0. Cancel fighter selection" << std::endl << std::endl;
+	std::cout << "Choose a fighter to re-equip: ";
 	std::cin >> player_choice_bot1;
 
 	if (player_choice_bot1 == 0) {
@@ -56,10 +56,10 @@ void CP_Player::Player_ChangeBandUI()
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
 	for (int i = 0; i < Player_Available_NPC.size(); i++) {
-		std::cout << i + 1 << ". " << Player_Available_NPC[i]->Character_GetName() << " / Êîëè÷åñòâî çäîðîâüÿ: " << Player_Available_NPC[i]->Character_GetHP() << " / Îðóæèå: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetName() << " ñ óðîíîì: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+		std::cout << i + 1 << ". " << Player_Available_NPC[i]->Character_GetName() << " / HP: " << Player_Available_NPC[i]->Character_GetHP() << " / Weapon: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
 	}
 
-	std::cout << "Âûáåðèòå áîéöà, êîòîðîãî âû áû õîòåëè âçÿòü: ";
+	std::cout << "Choose a fighter to add: ";
 	std::cin >> player_choice_bot2;
 
 	Player_ChangeBand(player_choice_bot1 - 1, player_choice_bot2 - 1);
@@ -82,18 +82,18 @@ void CP_Player::Player_UpgradeBotsUI()
 {
 	int player_choice;
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
-	std::cout << "Âû ìîæåòå ïîòðàòèòü " << Character_GetEXP() << " åäèíèö îïûòà íà ïðîêà÷êó ïåðñîíàæåé" << std::endl << std::endl;
+	std::cout << "You can spend " << Character_GetEXP() << " experience points to upgrade characters" << std::endl << std::endl;
 	for (int i = 0; i < Player_Team.size(); i++) {
 		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / " << Player_Team[i]->Character_GetLevel() << " LVL ";
 		if (Player_Team[i]->Character_GetLevel() != 5) {
-			std::cout << "/ Íóæíî " << Player_Team[i]->Character_GetEXP() + 10 << " äëÿ ïðîêà÷êè ñëåäóþùåãî óðîâíÿ" << std::endl;
+			std::cout << "/ Need " << Player_Team[i]->Character_GetEXP() + 10 << " for the next level upgrade" << std::endl;
 		}
 		if (Player_Team[i]->Character_GetLevel() == 5) {
-			std::cout << "/ Äîñòèãíóò ìàêñèìàëüíûé óðîâåíü " << std::endl;
+			std::cout << "/ Max level reached" << std::endl;
 		}
 	}
-	std::cout << "0. Íó âäðóã, âû ïåðåäóìàëè óëó÷øàòü áîéöîâ" << std::endl << std::endl;
-	std::cout << "Âûáåðèòå áîéöà, êîòîðîãî âû áû õîòåëè óëó÷øèòü: ";
+	std::cout << "0. Cancel upgrading fighters" << std::endl << std::endl;
+	std::cout << "Choose a fighter to upgrade: ";
 	std::cin >> player_choice;
 
 	if (player_choice == 0) {
@@ -110,7 +110,7 @@ void CP_Player::Player_UpgradeBotsUI()
 				Player_UpgradeBotsUI();
 			}
 			else {
-				std::cout << "Ïåðñîíàæ ïðîêà÷åí íà ìàêñèìàëüíûé óðîâåíü" << std::endl;
+				std::cout << "Character is already at max level" << std::endl;
 				system("pause");
 				system("cls");
 				Player_UpgradeBotsUI();
@@ -118,14 +118,14 @@ void CP_Player::Player_UpgradeBotsUI()
 		}
 		if (Character_GetEXP() < Player_Team[player_choice - 1]->Character_GetEXP() + 10) {
 			if (Player_Team[player_choice - 1]->Character_GetLevel() == 5) {
-				std::cout << "Ïåðñîíàæ ïðîêà÷åí íà ìàêñèìàëüíûé óðîâåíü" << std::endl;
+				std::cout << "Character is already at max level" << std::endl;
 				system("pause");
 				system("cls");
 				Player_UpgradeBotsUI();
 			}
 			else {
 	GP_AsciiRenderer.RenderScene("upgrade_party_overview");
-				std::cout << "Ó âàñ íåäîñòàòî÷íî îïûòà!" << std::endl;
+				std::cout << "You do not have enough experience!" << std::endl;
 				system("pause");
 				system("cls");
 				Player_UpgradeBotsUI();
@@ -150,8 +150,8 @@ void CP_Player::Player_ChangeWeaponUI()
 	for (int i = 0; i < Player_Team.size(); i++) {
 		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / " << Player_Team[i]->Character_GetItemFINV(0)->Item_GetName() << std::endl;
 	}
-	std::cout << "0. Íó âäðóã, âû ïåðåäóìàëè ìåíÿòü îðóæèå" << std::endl << std::endl;
-	std::cout << "Âûáåðèòå áîéöà, êîòîðîãî âû áû õîòåëè ïîìåíÿòü: ";
+	std::cout << "0. Cancel weapon change" << std::endl << std::endl;
+	std::cout << "Choose a fighter to re-equip: ";
 	std::cin >> player_choice;
 
 	if (player_choice == 0) {
@@ -163,10 +163,10 @@ void CP_Player::Player_ChangeWeaponUI()
 	system("cls");
 	if (Player_Inventory.size() != 0) {
 		for (int i = 0; i < Player_Inventory.size(); i++) {
-			std::cout << i + 1 << ". " << Player_Inventory[i]->Item_GetName() << " / " << Player_Inventory[i]->Item_GetClass() << " / " << Player_Inventory[i]->Item_GetDMG() << " åäèíèö óðîíà çà óäàð" << std::endl;
+			std::cout << i + 1 << ". " << Player_Inventory[i]->Item_GetName() << " / " << Player_Inventory[i]->Item_GetClass() << " / " << Player_Inventory[i]->Item_GetDMG() << " damage per hit" << std::endl;
 		}
 
-		std::cout << "Âûáåðèòå îðóæèå, êîòîðîå âû áû õîòåëè ïîñòàâèòü êàê îðóæèå: ";
+		std::cout << "Choose a weapon to equip: ";
 		std::cin >> item_choice;
 
 		Player_ChangeWeapon(player_choice - 1, item_choice - 1);
@@ -176,7 +176,7 @@ void CP_Player::Player_ChangeWeaponUI()
 	}
 
 	if (Player_Inventory.size() == 0) {
-		std::cout << "Âàø èíâåíòàðü ïóñò" << std::endl;
+		std::cout << "Your inventory is empty" << std::endl;
 		system("pause");
 		system("cls");
 		P_BackToPigBase();
