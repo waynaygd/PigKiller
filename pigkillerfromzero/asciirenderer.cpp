@@ -16,7 +16,7 @@ CP_AsciiRenderer::CP_AsciiRenderer()
 
     ASCII_Scenes["base_tavern_interior"] = {
         "  ______________________________________  ",
-        " |  []  []  []      Таверна-база       | ",
+        " |  []  []  []       Tavern Base        | ",
         " |      ( )        ( )         ( )      | ",
         " |   ___|_|___   ___|_|___   ___|_|___   | ",
         " |  |  _   _  | |  _   _  | |  _   _  |  | ",
@@ -24,19 +24,19 @@ CP_AsciiRenderer::CP_AsciiRenderer()
     };
 
     ASCII_Scenes["travel_map"] = {
-        " [БАЗА]* ---- [КАБАК] ---- [РЫНОК] ",
+        " [BASE]* ---- [TAVERN] ---- [MARKET] ",
         "    |                         |     ",
-        " [БАНК] ---------------- [ВОЛЧЬЯ БАЗА]"
+        " [BANK] ---------------- [WOLF BASE]"
     };
 
     ASCII_Scenes["upgrade_party_overview"] = {
-        "  [1] Лидер  [2] Боец  [3] Боец  [4] Боец  ",
-        "  W: оружие и параметры | A: броня (future) "
+        "  [1] Leader [2] Fighter [3] Fighter [4] Fighter ",
+        "  W: weapon and stats  | A: armor (future) "
     };
 
     ASCII_Scenes["battle_left_right"] = {
-        " БАНДА ИГРОКА                    БАНДА ВОЛКОВ ",
-        " [Свин][Свин][Свин]            [Волк][Волк][Волк]"
+        " PLAYER GANG                     WOLF GANG ",
+        " [Pig][Pig][Pig]               [Wolf][Wolf][Wolf]"
     };
 }
 
