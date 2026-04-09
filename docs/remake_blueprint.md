@@ -1,148 +1,147 @@
 # PigKiller Remake Blueprint
 
-## Цели ремейка
+## Remake Goals
 
-1. Сделать конфиги персонажей и баланса гибкими и читаемыми: **имена персонажей в конфиге вместо названий классов**.
-2. Расширить систему прокачки оружия (уровни, модификаторы, стоимость, ограничения по персонажу/классу).
-3. Добавить отдельную систему брони: **экипировка + рынок брони**.
-4. Ввести ASCII-рендерер поверх текущего UI, чтобы игрок видел состояние мира (база, путешествие, прокачка, бой).
-
----
-
-## 1) Новая конфигурационная модель
-
-### Проблема сейчас
-- Логика и данные смешаны в коде.
-- Плохо масштабируется добавление новых персонажей и предметов.
-
-### Предлагаемая структура
-Создать слой `GameData`, загружаемый из JSON, например:
-
-- `data/characters.json` — персонажи (id, displayName, базовые статы, стартовое оружие, стартовая броня).
-- `data/weapons.json` — оружие + дерево апгрейдов.
-- `data/armor.json` — броня + апгрейды.
-- `data/locations.json` — карта путешествий + блокировки.
-- `data/ascii_scenes.json` — ASCII-сцены по ключам.
-
-### Правило идентичности
-- Везде использовать **стабильный id** (`"pig_leader"`),
-- отображать игроку `displayName` (`"Главный Свин"`).
-
-Это позволит безопасно менять локализацию и имена, не ломая логику.
+1. Make character and balance configs flexible/readable: **character names in config instead of class names**.
+2. Expand weapon progression (levels, modifiers, costs, character/class requirements).
+3. Add a dedicated armor system: **equipment + armor market**.
+4. Add an ASCII renderer over the current UI so the player can see world state (base, travel, upgrades, battle).
 
 ---
 
-## 2) Прокачка оружия: практичная модель
+## 1) New Configuration Model
 
-### Рекомендуемый компромисс
-Чтобы не перегрузить проект, сделать 2 слоя:
+### Current Problem
+- Logic and data are mixed in code.
+- Adding new characters/items does not scale well.
 
-1. **Базовый уровень оружия (global template level)**
-   - Улучшение шаблона в кузнице/мастерской.
-2. **Персональная модификация экземпляра оружия**
-   - +урон / +крит / +точность (ограниченные слоты).
+### Proposed Structure
+Create a `GameData` layer loaded from JSON, for example:
 
-### Почему это имеет смысл
-- Даёт глубину.
-- Не требует full-RPG инвентаря с сотней статов.
-- Совместимо с текущей системой смены оружия.
+- `data/characters.json` - characters (id, displayName, base stats, starting weapon, starting armor).
+- `data/weapons.json` - weapons + upgrade tree.
+- `data/armor.json` - armor + upgrades.
+- `data/locations.json` - travel map + locks.
+- `data/ascii_scenes.json` - ASCII scenes by key.
 
-### Баланс
-- Каждый апгрейд: цена, требование к уровню персонажа, лимит tier.
-- Сохранение: у каждого оружия `instanceId` и список активных модов.
+### Identity Rule
+- Always use a **stable id** (`"pig_leader"`),
+- show `displayName` to the player (`"Chief Pig"`).
+
+This makes localization/name changes safe without breaking logic.
 
 ---
 
-## 3) Броня и второй рынок
+## 2) Weapon Upgrades: Practical Model
 
-### Что добавить
-- Слот брони у каждого бойца (`armorId`).
-- Расчёт входящего урона:
+### Recommended Compromise
+Keep implementation lightweight with 2 layers:
+
+1. **Global template level**
+   - Upgrade weapon templates in forge/workshop.
+2. **Per-instance weapon modification**
+   - +damage / +crit / +accuracy (limited slots).
+
+### Why this works
+- Adds depth.
+- Avoids a heavy full-RPG inventory model.
+- Compatible with current weapon-swap flow.
+
+### Balance
+- Every upgrade has a cost, required character level, and tier cap.
+- Persistence: each weapon has `instanceId` and active modifiers.
+
+---
+
+## 3) Armor and a Second Market
+
+### Additions
+- Armor slot per fighter (`armorId`).
+- Incoming damage formula:
   - `finalDamage = max(1, rawDamage - armorFlatReduction)`
-  - затем `% reduction` (если есть).
+  - then `% reduction` (if present).
 
-### Экономика
-- Оставить рынок оружия как есть.
-- Добавить рынок брони как отдельный раздел:
-  - `1. Оружие`
-  - `2. Броня`
-- Броня может иметь: durability (опционально), tier, passive bonus.
+### Economy
+- Keep current weapon market.
+- Add armor market as a separate section:
+  - `1. Weapons`
+  - `2. Armor`
+- Armor may include durability (optional), tier, and passive bonus.
 
 ---
 
-## 4) ASCII-рендерер (главный пункт)
+## 4) ASCII Renderer (Main Point)
 
-### Концепция
-Перед меню рендерить ASCII-сцену по текущему экрану.
+### Concept
+Render an ASCII scene before each menu for the current screen.
 
 ```text
 +----------------------------------+
-| [ASCII сцена]                    |
+| [ASCII scene]                    |
 |                                  |
 +----------------------------------+
 | 1) ...                           |
 | 2) ...                           |
-| > Ввод                           |
+| > Input                          |
 +----------------------------------+
 ```
 
-### Ключи сцен
+### Scene Keys
 - `base_tavern_interior`
 - `travel_map`
 - `upgrade_party_overview`
 - `battle_left_right`
 
-### Варианты рендера
-1. **Статический**: просто печать заранее заданных сцен.
-2. **Параметризованный**: замена плейсхолдеров (`{{playerName}}`, `{{enemyName}}`, hp bars).
+### Render Variants
+1. **Static**: print predefined scenes.
+2. **Parameterized**: replace placeholders (`{{playerName}}`, `{{enemyName}}`, hp bars).
 
-Начать со статического + 2-3 плейсхолдера.
-
----
-
-## Предложенная последовательность внедрения
-
-### Sprint 1: Данные и слой загрузки
-- Ввести JSON-файлы + валидацию ключей.
-- Убрать «магические значения» из кода в конфиг.
-
-### Sprint 2: Броня + рынок брони
-- Добавить броню в модель персонажа.
-- Добавить меню покупки/экипировки.
-
-### Sprint 3: Апгрейды оружия
-- Реализовать tiers + модификаторы.
-- UI для апгрейдов.
-
-### Sprint 4: ASCII-рендерер
-- Отрисовка сцены для базы/путешествия/прокачки/боя.
-- Поддержка ключей + параметров.
-
-### Sprint 5: Полировка
-- Баланс экономики.
-- Удобство UI.
-- Тестовые сценарии (регресс).
+Start with static scenes + 2-3 placeholders.
 
 ---
 
-## Минимальные технические требования для старта
+## Suggested Delivery Sequence
 
-1. Подключить JSON-библиотеку (`nlohmann/json`) или аналог.
-2. Создать единый `GameContext`:
-   - текущий экран,
-   - состояние игрока,
-   - ссылки на загруженные данные.
-3. Сделать API рендера:
+### Sprint 1: Data & Loading Layer
+- Add JSON files + key validation.
+- Move magic values from code to config.
+
+### Sprint 2: Armor + Armor Market
+- Add armor to character model.
+- Add buy/equip menu flow.
+
+### Sprint 3: Weapon Upgrades
+- Implement tiers + modifiers.
+- Add upgrade UI.
+
+### Sprint 4: ASCII Renderer
+- Render scenes for base/travel/upgrade/battle.
+- Add key + parameter support.
+
+### Sprint 5: Polish
+- Economy balance pass.
+- UI quality improvements.
+- Regression scenarios.
+
+---
+
+## Minimum Technical Requirements to Start
+
+1. Add a JSON library (`nlohmann/json`) or equivalent.
+2. Create a single `GameContext` with:
+   - current screen,
+   - player state,
+   - loaded data references.
+3. Add renderer API:
    - `RenderScene(sceneKey, context)`
 
 ---
 
-## Риски и как их снизить
+## Risks and Mitigations
 
-- **Риск:** слишком много фич сразу.
-  - **Решение:** включать через feature flags/по спринтам.
-- **Риск:** конфиги сломают игру.
-  - **Решение:** schema validation + дефолтные fallback-конфиги.
-- **Риск:** ASCII-рендер «съест» UX.
-  - **Решение:** чёткая рамка, ограниченная высота сцены, единый шрифт/ширина.
-
+- **Risk:** too many features at once.
+  - **Mitigation:** ship via feature flags/sprints.
+- **Risk:** broken configs break the game.
+  - **Mitigation:** schema validation + default fallback configs.
+- **Risk:** ASCII renderer hurts UX.
+  - **Mitigation:** strict frame, limited scene height, fixed width/font.

@@ -2,15 +2,17 @@
 #include <vector>
 #include <string>
 #include "levelshop.h"
+#include "consoleutils.h"
 
-std::vector <std::string> DialogueStartShop = { "- Эй, Серый, пробовал эти яблоки?", "- Какие яблоки? Нам надо найти главу рынка, а ты все про какие-то яблоки...", "...",
-"- Ну и зря", "...", "- У рынка свины! Срочно на оборону!"
+std::vector<std::string> DialogueStartShop = {
+    "- Welcome to the market district.",
+    "- Supplies are scarce, prices are not friendly.",
+    "- Still, good steel wins fights."
 };
 
-std::vector <std::string> DialogueAfterShop = {"- Ну ребят, может договоримся не знаю... Вон, яблоки! Я попробовал, очень вкусные!", "...",
-"- Он реально настолько дурной?", "- Да, не понятно почему Волков его вообще с нами послал...", "- *ест яблоко*", "- Ну, с кем не бывает", "*звук протыкания мечом туловища*",
-"...", "- Ой, родненькие! Что ж я без вас бы делал!", "- Да не за что, дядь Свин, вон, покупатели уже пришли, мы ваш рынок теперь под защитой держать будем, можете спокойно торговать",
-"- Ох, ой! Не знаю даже как отблагодарить вас, можете теперь ко мне приходить, покупать всё что нужно, примем как родных!"
+std::vector<std::string> DialogueAfterShop = {
+    "- Smart buying keeps the team alive.",
+    "- Come back any time you need better gear."
 };
 
 void CP_LevelShop::Level_Gameplay()
@@ -21,7 +23,7 @@ void CP_LevelShop::Level_Gameplay()
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueStartShop[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 }
 
@@ -33,6 +35,6 @@ void CP_LevelShop::Level_AfterGameplay()
 		std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 		std::cout << DialogueAfterShop[vector_index] << std::endl << std::endl;
 		vector_index++;
-		system("pause");
+		CP_PauseForContinue();
 	}
 }

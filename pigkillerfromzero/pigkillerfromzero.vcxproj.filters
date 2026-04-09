@@ -1,141 +1,147 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Исходные файлы">
+    <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Файлы заголовков">
+    <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Файлы ресурсов">
+    <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="asciirenderer.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pigkillerfromzero.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="character.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="level.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="item.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shop.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fightsystem.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="levelpigbase.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="travelsystem.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="levelkabak.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="levelbank.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="levelshop.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="levelwolfbase.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="localization.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asciirenderer.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="character.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="menubasefunctions.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pig.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wolf.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="allclasses.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="alllevels.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="level.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelbank.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelkabak.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelpigbase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelshop.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="levelwolfbase.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="item.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemapple.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemarbalet.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itembulava.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemkatana.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemmorgenshtern.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemsekira.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="itemsword.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="shop.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fightsystem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="travelsystem.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="allitems.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="localization.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
