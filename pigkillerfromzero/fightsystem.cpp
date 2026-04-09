@@ -249,6 +249,7 @@ void FightSystem::FS_AttackByWolf(CP_Player& player, CP_LevelBase* level, int CP
 void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC) {
     int UserAction;
 
+    GP_AsciiRenderer.RenderBattleScene(CP_PigC, CP_WolfC);
     std::cout << "Your pig: " << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << std::endl << std::endl;
 
     std::cout << "Enemy wolf: " << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << std::endl << std::endl;
@@ -260,8 +261,15 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
     std::cin >> UserAction;
     std::cout << std::endl;
 
+    auto ShowPlayerAttackResultScreen = [&]() {
+        system("cls");
+        std::cout << "<- Pig Killer ->" << std::endl << std::endl;
+        GP_AsciiRenderer.RenderBattleScene(CP_PigC, CP_WolfC);
+    };
+
     if (UserAction == 1 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
         FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
+        ShowPlayerAttackResultScreen();
         std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
 
         std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
@@ -273,6 +281,7 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
         CP_RanGenDDChance();
         if (DD[0] < player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
             FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
+            ShowPlayerAttackResultScreen();
             std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
 
             std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
@@ -281,6 +290,7 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
             FS_FightUI(player, level);
         }
         if (DD[0] > player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
+            ShowPlayerAttackResultScreen();
             std::cout << "Double damage failed, you dealt 0 damage." << std::endl;
 
             std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
@@ -303,13 +313,14 @@ void FightSystem::FS_BotAttacks(CP_Player& player, CP_LevelBase* level) {
     FS_AttackByWolf(player, level, toattack[0], toattack[1]);
     if (hitc[0] >= level->Level_GetTeamBot(toattack[1])->Character_GetCHit()) {
         std::cout << "Enemy wolf " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " attacks!" << std::endl;
-        GP_AsciiRenderer.RenderScene("battle_left_right");
+        GP_AsciiRenderer.RenderBattleScene(toattack[1], toattack[0]);
         std::cout << "Your pig " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " received " << level->Level_GetTeamBot(toattack[0])->Character_GetItemFINV(0)->Item_GetDMG() << " damage" << std::endl;
         std::cout << "Health remaining: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
     }
 
     if (hitc[0] < level->Level_GetTeamBot(toattack[1])->Character_GetCHit()) {
         std::cout << "Enemy wolf " << level->Level_GetTeamBot(toattack[0])->Character_GetName() << " missed!" << std::endl;
+        GP_AsciiRenderer.RenderBattleScene(toattack[1], toattack[0]);
         std::cout << "Your pig " << player.Player_GetTeamBot(toattack[1])->Character_GetName() + std::to_string(toattack[1] + 1) << " received no damage" << std::endl;
         std::cout << "Health remaining: " << player.Player_GetTeamBot(toattack[1])->Character_GetCHP() << std::endl << std::endl;
     }
@@ -331,6 +342,7 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
     if (FS_PlayerTeamWin == false and FS_BotTeamWin == false) {
         std::cout << "<- Pig Killer ->" << std::endl << std::endl;
         if (player.Player_GetTurn() == true) {
+            GP_AsciiRenderer.RenderBattleScene();
             std::cout << "Your gang: " << std::endl;
             for (int i = 0; i < player.Player_GetPTSize(); i++) {
                 std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | Weapon: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
@@ -347,6 +359,7 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
 
             system("cls");
             std::cout << "<- Pig Killer ->" << std::endl << std::endl;
+            GP_AsciiRenderer.RenderBattleScene(player_choice - 1, -1);
 
             std::cout << "Wolf gang: " << std::endl;
             for (int i = 0; i < level->Level_GetWolfTeamSize(); i++) {

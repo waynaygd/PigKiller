@@ -40,7 +40,6 @@ void CP_Player::Player_ChangeBandUI()
 	GP_AsciiRenderer.RenderScene("upgrade_party_overview");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 	for (int i = 0; i < Player_Team.size(); i++) {
-	GP_AsciiRenderer.RenderScene("upgrade_party_overview");
 		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / HP: " << Player_Team[i]->Character_GetHP() << " / Weapon: "  << Player_Team[i]->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << Player_Team[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
 	}
 	std::cout << "0. Cancel fighter selection" << std::endl << std::endl;

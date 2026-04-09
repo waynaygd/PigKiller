@@ -11,6 +11,7 @@ private:
 public:
     CP_AsciiRenderer();
     void RenderScene(const std::string& SceneKey) const;
+    void RenderBattleScene(int SelectedPig = -1, int SelectedWolf = -1) const;
 };
 
 extern CP_AsciiRenderer GP_AsciiRenderer;
