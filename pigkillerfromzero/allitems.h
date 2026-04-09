@@ -1,0 +1,9 @@
+#pragma once
+#include "itemapple.h"
+#include "itemsword.h"
+#include "itembulava.h"
+#include "itemsekira.h"
+#include "itemaxe.h"
+#include "itemkatana.h"
+#include "itemmorgenshtern.h"
+#include "itemarbalet.h"
