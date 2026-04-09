@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asciirenderer.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="fightsystem.cpp" />
     <ClCompile Include="item.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allclasses.h" />
+    <ClInclude Include="asciirenderer.h" />
     <ClInclude Include="allitems.h" />
     <ClInclude Include="alllevels.h" />
     <ClInclude Include="character.h" />

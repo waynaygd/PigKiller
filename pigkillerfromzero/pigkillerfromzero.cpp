@@ -5,6 +5,7 @@
 #include <shellapi.h>
 #include "menubasefunctions.h"
 #include "fightsystem.h"
+#include "asciirenderer.h"
 
 CP_Player Player;
 FightSystem GP_Fight;
@@ -13,6 +14,7 @@ TravelSystem GP_Travel;
 int user_menuchoice;
 
 void mainmenu() {
+	GP_AsciiRenderer.RenderScene("main_menu");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
 	std::cout << "- 1. Начать игру - \n";
@@ -28,6 +30,7 @@ void mainmenu() {
 void GP_PigBase() {
 	int player_action;
 
+	GP_AsciiRenderer.RenderScene("base_tavern_interior");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 	std::cout << "- 1. Отправиться на битву - \n";
 	std::cout << "- 2. Поменять члена команды - \n";
