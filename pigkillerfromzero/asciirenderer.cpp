@@ -15,8 +15,13 @@ std::vector<std::string> GetAsciiSearchRoots()
     Roots.push_back("data/ascii");
     Roots.push_back("pigkillerfromzero/data/ascii");
     Roots.push_back("../data/ascii");
-    Roots.push_back("../../data/ascii");
     Roots.push_back("../pigkillerfromzero/data/ascii");
+    Roots.push_back("../../data/ascii");
+    Roots.push_back("../../pigkillerfromzero/data/ascii");
+    Roots.push_back("../../../data/ascii");
+    Roots.push_back("../../../pigkillerfromzero/data/ascii");
+    Roots.push_back("../../../../data/ascii");
+    Roots.push_back("../../../../pigkillerfromzero/data/ascii");
     return Roots;
 }
 
@@ -32,6 +37,55 @@ std::string JoinPath(const std::string& Left, const std::string& Right)
     }
 
     return Left + "/" + Right;
+}
+
+std::vector<std::string> GetFallbackScene(const std::string& SceneKey)
+{
+    if (SceneKey == "main_menu") {
+        std::vector<std::string> Lines;
+        Lines.push_back("   ____  _       _  ___ _ _ _           ");
+        Lines.push_back("  |  _ \\(_) __ _| |/ (_) | | | ___ _ __ ");
+        Lines.push_back("  | |_) | |/ _` | ' /| | | | |/ _ \\ '__|");
+        Lines.push_back("  |  __/| | (_| | . \\| | | | |  __/ |   ");
+        Lines.push_back("  |_|   |_|\\__, |_|\\_\\_|_|_|_|\\___|_|   ");
+        Lines.push_back("           |___/                           ");
+        return Lines;
+    }
+
+    if (SceneKey == "base_tavern_interior") {
+        std::vector<std::string> Lines;
+        Lines.push_back("  ______________________________________  ");
+        Lines.push_back(" |  []  []  []       Tavern Base        | ");
+        Lines.push_back(" |      ( )        ( )         ( )      | ");
+        Lines.push_back(" |   ___|_|___   ___|_|___   ___|_|___   | ");
+        Lines.push_back(" |  |  _   _  | |  _   _  | |  _   _  |  | ");
+        Lines.push_back(" |__|_| |_| |_|_|_| |_| |_|_|_| |_| |_|__| ");
+        return Lines;
+    }
+
+    if (SceneKey == "travel_map") {
+        std::vector<std::string> Lines;
+        Lines.push_back(" [BASE]* ---- [TAVERN] ---- [MARKET] ");
+        Lines.push_back("    |                         |     ");
+        Lines.push_back(" [BANK] ---------------- [WOLF BASE]");
+        return Lines;
+    }
+
+    if (SceneKey == "upgrade_party_overview") {
+        std::vector<std::string> Lines;
+        Lines.push_back("  [1] Leader [2] Fighter [3] Fighter [4] Fighter ");
+        Lines.push_back("  W: weapon and stats  | A: armor (future) ");
+        return Lines;
+    }
+
+    if (SceneKey == "battle_left_right") {
+        std::vector<std::string> Lines;
+        Lines.push_back(" PLAYER GANG                     WOLF GANG ");
+        Lines.push_back(" [Pig][Pig][Pig]               [Wolf][Wolf][Wolf]");
+        return Lines;
+    }
+
+    return std::vector<std::string>();
 }
 
 std::string BuildFighterLine(CP_CharacterBase* Fighter, int Index)
@@ -57,11 +111,30 @@ std::string BuildFighterLine(CP_CharacterBase* Fighter, int Index)
 
 CP_AsciiRenderer::CP_AsciiRenderer()
 {
-    LoadSceneFromJson("main_menu", "main_menu.json");
-    LoadSceneFromJson("base_tavern_interior", "base_tavern_interior.json");
-    LoadSceneFromJson("travel_map", "travel_map.json");
-    LoadSceneFromJson("upgrade_party_overview", "upgrade_party_overview.json");
-    LoadSceneFromJson("battle_left_right", "battle_left_right.json");
+    const bool MainLoaded = LoadSceneFromJson("main_menu", "main_menu.json");
+    if (!MainLoaded) {
+        ASCII_Scenes["main_menu"] = GetFallbackScene("main_menu");
+    }
+
+    const bool BaseLoaded = LoadSceneFromJson("base_tavern_interior", "base_tavern_interior.json");
+    if (!BaseLoaded) {
+        ASCII_Scenes["base_tavern_interior"] = GetFallbackScene("base_tavern_interior");
+    }
+
+    const bool TravelLoaded = LoadSceneFromJson("travel_map", "travel_map.json");
+    if (!TravelLoaded) {
+        ASCII_Scenes["travel_map"] = GetFallbackScene("travel_map");
+    }
+
+    const bool UpgradeLoaded = LoadSceneFromJson("upgrade_party_overview", "upgrade_party_overview.json");
+    if (!UpgradeLoaded) {
+        ASCII_Scenes["upgrade_party_overview"] = GetFallbackScene("upgrade_party_overview");
+    }
+
+    const bool BattleLoaded = LoadSceneFromJson("battle_left_right", "battle_left_right.json");
+    if (!BattleLoaded) {
+        ASCII_Scenes["battle_left_right"] = GetFallbackScene("battle_left_right");
+    }
 }
 
 bool CP_AsciiRenderer::LoadSceneFromJson(const std::string& SceneKey, const std::string& FileName)
