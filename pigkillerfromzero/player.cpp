@@ -40,7 +40,7 @@ void CP_Player::Player_ChangeBandUI()
 	GP_AsciiRenderer.RenderScene("upgrade_party_overview");
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 	for (int i = 0; i < Player_Team.size(); i++) {
-		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / HP: " << Player_Team[i]->Character_GetHP() << " / Weapon: "  << Player_Team[i]->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << Player_Team[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+		std::cout << i + 1 << ". " << Player_Team[i]->Character_GetName() << " / HP: " << Player_Team[i]->Character_GetHP() << " / "  << Player_Team[i]->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
 	}
 	std::cout << "0. Cancel fighter selection" << std::endl << std::endl;
 	std::cout << "Choose a fighter to re-equip: ";
@@ -56,7 +56,7 @@ void CP_Player::Player_ChangeBandUI()
 	std::cout << "<- Pig Killer ->" << std::endl << std::endl;
 
 	for (int i = 0; i < Player_Available_NPC.size(); i++) {
-		std::cout << i + 1 << ". " << Player_Available_NPC[i]->Character_GetName() << " / HP: " << Player_Available_NPC[i]->Character_GetHP() << " / Weapon: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+		std::cout << i + 1 << ". " << Player_Available_NPC[i]->Character_GetName() << " / HP: " << Player_Available_NPC[i]->Character_GetHP() << " / " << Player_Available_NPC[i]->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
 	}
 
 	std::cout << "Choose a fighter to add: ";

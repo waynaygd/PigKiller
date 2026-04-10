@@ -1,0 +1,9 @@
+{
+  "default_pig": ["Niff", "Rosie", "Bacon", "Poppy", "Trotter", "Milo"],
+  "pro_pig": ["Brisket", "Hammond", "Rumble", "Porkins", "Tasha", "Rufus"],
+  "mega_pro_pig": ["Boaris", "Titanham", "Mighty Oink", "Thunderhoof", "Iron Snout", "Stoneham"],
+  "default_wolf": ["Fang", "Skoll", "Rag", "Shadow", "Nightpaw", "Gray"],
+  "pro_wolf": ["Grimm", "Howler", "Varg", "Ashclaw", "Razor", "Thorn"],
+  "mega_pro_wolf": ["Fenrik", "Dreadfang", "Moonreaper", "Bloodclaw", "Blackmane", "Frostbite"],
+  "boss_wolf": ["Wolf King", "Fenrir the King"]
+}
