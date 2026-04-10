@@ -94,13 +94,13 @@ void CP_LevelBase::Level_GenerateWolfTeam(int L_NPC_Count)
     }
 
     for (int i = 0; i < Level_GetWolfTeamSize(); i++) {
-        if (Level_GetTeamBot(i)->Character_GetName() == "Default Wolf") {
+        if (Level_GetTeamBot(i)->Character_GetDescription() == "Default Wolf") {
             Level_GetTeamBot(i)->Character_AddToInventory(new CP_ItemSword);
         }
-        if (Level_GetTeamBot(i)->Character_GetName() == "Pro Wolf") {
+        if (Level_GetTeamBot(i)->Character_GetDescription() == "Pro Wolf") {
             Level_GetTeamBot(i)->Character_AddToInventory(new CP_ItemAxe);
         }
-        if (Level_GetTeamBot(i)->Character_GetName() == "Mega Pro Wolf") {
+        if (Level_GetTeamBot(i)->Character_GetDescription() == "Mega Pro Wolf") {
             Level_GetTeamBot(i)->Character_AddToInventory(new CP_ItemKatana);
         }
     }
@@ -118,4 +118,3 @@ void CP_LevelBase::Level_Gameplay()
 void CP_LevelBase::Level_AfterGameplay()
 {
 }
-
