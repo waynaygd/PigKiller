@@ -14,7 +14,7 @@ public:
 	void FS_FightUI(CP_Player& player, CP_LevelBase* level);
 	void FS_AttackByWolf(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC);
 
-	void FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC);
+	int FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC);
 	void FS_BotAttacks(CP_Player& player, CP_LevelBase* level);
 
 	void FS_CheckPlayerTeamIsDead(CP_Player& player);
