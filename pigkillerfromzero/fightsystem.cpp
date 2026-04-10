@@ -330,8 +330,8 @@ int FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP
     std::cout << "Ability points: " << FS_PlayerAbilityPoints << std::endl << std::endl;
 
     std::cout << "1. Attack" << std::endl;
-    std::cout << "2. Double damage attack (chance: " << player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5 << "%)" << std::endl << std::endl;
-    std::cout << "3. Weapon skill: " << WeaponSkillName << " (damage + heal, cost: 2 AP)" << std::endl;
+    std::cout << "2. Double damage attack (chance: " << player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5 << "%)" << std::endl;
+    std::cout << "3. Weapon skill: " << WeaponSkillName << " (damage + heal, cost: 2 AP)" << std::endl << std::endl;
     std::cout << "4. Change target" << std::endl;
     std::cout << "5. Change pig" << std::endl << std::endl;
 
@@ -481,6 +481,8 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
         if (player.Player_GetTurn() == true) {
             bool NeedPigSelection = true;
             while (NeedPigSelection) {
+                system("cls");
+                std::cout << "<- Pig Killer ->" << std::endl << std::endl;
                 GP_AsciiRenderer.RenderBattleScene(BuildPigTeamForRender(player), BuildWolfTeamForRender(level));
                 std::cout << "Your gang: " << std::endl;
                 for (int i = 0; i < player.Player_GetPTSize(); i++) {
@@ -526,6 +528,7 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
                     }
 
                     if (AttackResult == 2) {
+                        system("cls");
                         NeedWolfSelection = false;
                         continue;
                     }
