@@ -26,4 +26,5 @@ public:
 protected:
 	bool FS_BotTeamWin = false;
 	bool FS_PlayerTeamWin = false;
+	int FS_PlayerAbilityPoints = 2;
 };

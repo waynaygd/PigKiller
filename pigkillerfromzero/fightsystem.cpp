@@ -254,6 +254,7 @@ void FightSystem::FS_StartFight(CP_Player& player, CP_LevelBase* level)
 {
     FS_PlayerTeamWin = false;
     FS_BotTeamWin = false;
+    FS_PlayerAbilityPoints = 2;
 
     if (player.Player_GetPTSize() == 0) {
         system("cls");
@@ -318,7 +319,7 @@ void FightSystem::FS_AttackByWolf(CP_Player& player, CP_LevelBase* level, int CP
 }
 
 void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC) {
-    int UserAction;
+    int UserAction = 0;
     CP_ItemBase* Weapon = player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0);
     const std::string WeaponSkillName = GetWeaponSkillName(Weapon);
 
@@ -326,14 +327,11 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
     std::cout << "Your pig: " << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << std::endl << std::endl;
 
     std::cout << "Enemy wolf: " << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << std::endl << std::endl;
+    std::cout << "Ability points: " << FS_PlayerAbilityPoints << std::endl << std::endl;
 
     std::cout << "1. Attack" << std::endl;
     std::cout << "2. Double damage attack (chance: " << player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5 << "%)" << std::endl << std::endl;
-    std::cout << "3. Weapon skill: " << WeaponSkillName << " (damage + heal)" << std::endl << std::endl;
-
-    std::cout << "Choose an action: ";
-    std::cin >> UserAction;
-    std::cout << std::endl;
+    std::cout << "3. Weapon skill: " << WeaponSkillName << " (damage + heal, cost: 2 AP)" << std::endl << std::endl;
 
     auto ShowPlayerAttackResultScreen = [&]() {
         system("cls");
@@ -341,19 +339,12 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
         GP_AsciiRenderer.RenderBattleScene(BuildPigTeamForRender(player), BuildWolfTeamForRender(level), CP_PigC, CP_WolfC, 1);
     };
 
-    if (UserAction == 1 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
-        FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
-        ShowPlayerAttackResultScreen();
-        std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
+    while (true) {
+        std::cout << "Choose an action: ";
+        std::cin >> UserAction;
+        std::cout << std::endl;
 
-        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
-        CP_PauseForContinue();
-        player.Player_SetTurn(false);
-        FS_FightUI(player, level);
-    }
-    if (UserAction == 2 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
-        CP_RanGenDDChance();
-        if (DD[0] < player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
+        if (UserAction == 1 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
             FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
             ShowPlayerAttackResultScreen();
             std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
@@ -362,32 +353,59 @@ void FightSystem::FS_PlayerAttacks(CP_Player& player, CP_LevelBase* level, int C
             CP_PauseForContinue();
             player.Player_SetTurn(false);
             FS_FightUI(player, level);
+            return;
         }
-        if (DD[0] > player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
-            ShowPlayerAttackResultScreen();
-            std::cout << "Double damage failed, you dealt 0 damage." << std::endl;
 
-            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+        if (UserAction == 2 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
+            CP_RanGenDDChance();
+            if (DD[0] < player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
+                FS_AttackByPig(player, level, CP_PigC, CP_WolfC, UserAction);
+                ShowPlayerAttackResultScreen();
+                std::cout << "You dealt " << player.Player_GetTeamBot(CP_PigC)->Character_GetItemFINV(0)->Item_GetDMG() << "!" << std::endl;
+
+                std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+                CP_PauseForContinue();
+                player.Player_SetTurn(false);
+                FS_FightUI(player, level);
+                return;
+            }
+            if (DD[0] > player.Player_GetTeamBot(CP_PigC)->Character_GetLevel() * 5) {
+                ShowPlayerAttackResultScreen();
+                std::cout << "Double damage failed, you dealt 0 damage." << std::endl;
+
+                std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl << std::endl;
+                CP_PauseForContinue();
+                player.Player_SetTurn(false);
+                FS_FightUI(player, level);
+                return;
+            }
+        }
+
+        if (UserAction == 3 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
+            if (FS_PlayerAbilityPoints < 2) {
+                std::cout << "Not enough ability points. You need 2 AP for this skill." << std::endl << std::endl;
+                continue;
+            }
+
+            FS_PlayerAbilityPoints -= 2;
+            const int DamageBySkill = CalculateWeaponSkillDamage(player.Player_GetTeamBot(CP_PigC), Weapon);
+            const int HealBySkill = CalculateWeaponSkillHeal(player.Player_GetTeamBot(CP_PigC), Weapon);
+            level->Level_GetTeamBot(CP_WolfC)->Character_TakeDamage(DamageBySkill);
+            ApplyHealToCharacter(player.Player_GetTeamBot(CP_PigC), HealBySkill);
+
+            ShowPlayerAttackResultScreen();
+            std::cout << "You used " << WeaponSkillName << " and dealt " << DamageBySkill << " damage!" << std::endl;
+            std::cout << "Your pig restored " << HealBySkill << " HP." << std::endl;
+            std::cout << "Ability points left: " << FS_PlayerAbilityPoints << std::endl;
+            std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl;
+            std::cout << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << " now has " << player.Player_GetTeamBot(CP_PigC)->Character_GetCHP() << " health points." << std::endl << std::endl;
             CP_PauseForContinue();
             player.Player_SetTurn(false);
             FS_FightUI(player, level);
+            return;
         }
-    }
 
-    if (UserAction == 3 and level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
-        const int DamageBySkill = CalculateWeaponSkillDamage(player.Player_GetTeamBot(CP_PigC), Weapon);
-        const int HealBySkill = CalculateWeaponSkillHeal(player.Player_GetTeamBot(CP_PigC), Weapon);
-        level->Level_GetTeamBot(CP_WolfC)->Character_TakeDamage(DamageBySkill);
-        ApplyHealToCharacter(player.Player_GetTeamBot(CP_PigC), HealBySkill);
-
-        ShowPlayerAttackResultScreen();
-        std::cout << "You used " << WeaponSkillName << " and dealt " << DamageBySkill << " damage!" << std::endl;
-        std::cout << "Your pig restored " << HealBySkill << " HP." << std::endl;
-        std::cout << level->Level_GetTeamBot(CP_WolfC)->Character_GetName() << " now has " << level->Level_GetTeamBot(CP_WolfC)->Character_GetCHP() << " health points." << std::endl;
-        std::cout << player.Player_GetTeamBot(CP_PigC)->Character_GetName() << " now has " << player.Player_GetTeamBot(CP_PigC)->Character_GetCHP() << " health points." << std::endl << std::endl;
-        CP_PauseForContinue();
-        player.Player_SetTurn(false);
-        FS_FightUI(player, level);
+        std::cout << "Unknown action. Choose 1, 2 or 3." << std::endl << std::endl;
     }
 }
 
@@ -434,6 +452,7 @@ void FightSystem::FS_BotAttacks(CP_Player& player, CP_LevelBase* level) {
     }
 
     CP_PauseForContinue();
+    FS_PlayerAbilityPoints += 1;
     player.Player_SetTurn(true);
     FS_FightUI(player, level);
 }
