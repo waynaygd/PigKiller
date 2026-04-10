@@ -264,21 +264,37 @@ void CP_AsciiRenderer::RenderScene(const std::string& SceneKey) const
     std::cout << "==============================================" << std::endl << std::endl;
 }
 
-void CP_AsciiRenderer::RenderBattleScene(int SelectedPig, int SelectedWolf) const
+void CP_AsciiRenderer::RenderBattleScene(int SelectedPig, int SelectedWolf, int HighlightMode) const
 {
     std::string PigLine;
     std::string WolfLine;
 
     for (int i = 0; i < 3; i++) {
         if (i == SelectedPig) {
-            PigLine += "\033[1m[Pig]\033[0m";
+            if (HighlightMode == 1) {
+                PigLine += "\033[1;32m[Pig]\033[0m";
+            }
+            else if (HighlightMode == 2) {
+                PigLine += "\033[1;31m[Pig]\033[0m";
+            }
+            else {
+                PigLine += "\033[1m[Pig]\033[0m";
+            }
         }
         else {
             PigLine += "[Pig]";
         }
 
         if (i == SelectedWolf) {
-            WolfLine += "\033[1m[Wolf]\033[0m";
+            if (HighlightMode == 1) {
+                WolfLine += "\033[1;31m[Wolf]\033[0m";
+            }
+            else if (HighlightMode == 2) {
+                WolfLine += "\033[1;32m[Wolf]\033[0m";
+            }
+            else {
+                WolfLine += "\033[1m[Wolf]\033[0m";
+            }
         }
         else {
             WolfLine += "[Wolf]";
@@ -294,14 +310,29 @@ void CP_AsciiRenderer::RenderBattleScene(int SelectedPig, int SelectedWolf) cons
 void CP_AsciiRenderer::RenderBattleScene(const std::vector<CP_CharacterBase*>& PigTeam,
                                          const std::vector<CP_CharacterBase*>& WolfTeam,
                                          int SelectedPig,
-                                         int SelectedWolf) const
+                                         int SelectedWolf,
+                                         int HighlightMode) const
 {
     std::cout << "==============================================" << std::endl;
+    if (HighlightMode == 1) {
+        std::cout << " \033[1;32mAttacker\033[0m -> \033[1;31mTarget\033[0m" << std::endl;
+    }
+    else if (HighlightMode == 2) {
+        std::cout << " \033[1;32mAttacker\033[0m <- \033[1;31mTarget\033[0m" << std::endl;
+    }
     std::cout << " PLAYER GANG" << std::endl;
 
     for (std::size_t i = 0; i < PigTeam.size(); i++) {
         if (static_cast<int>(i) == SelectedPig) {
-            std::cout << "\033[1m";
+            if (HighlightMode == 1) {
+                std::cout << "\033[1;32m";
+            }
+            else if (HighlightMode == 2) {
+                std::cout << "\033[1;31m";
+            }
+            else {
+                std::cout << "\033[1m";
+            }
         }
         std::cout << BuildFighterLine(PigTeam[i], static_cast<int>(i)) << std::endl;
         if (static_cast<int>(i) == SelectedPig) {
@@ -314,7 +345,15 @@ void CP_AsciiRenderer::RenderBattleScene(const std::vector<CP_CharacterBase*>& P
 
     for (std::size_t i = 0; i < WolfTeam.size(); i++) {
         if (static_cast<int>(i) == SelectedWolf) {
-            std::cout << "\033[1m";
+            if (HighlightMode == 1) {
+                std::cout << "\033[1;31m";
+            }
+            else if (HighlightMode == 2) {
+                std::cout << "\033[1;32m";
+            }
+            else {
+                std::cout << "\033[1m";
+            }
         }
         std::cout << BuildFighterLine(WolfTeam[i], static_cast<int>(i)) << std::endl;
         if (static_cast<int>(i) == SelectedWolf) {
