@@ -7,6 +7,7 @@ public:
 	std::string Item_GetName();
 	std::string Item_GetDescription();
 	std::string Item_GetClass();
+	std::string Item_GetCombatLabel();
 	int Item_GetID();
 	int Item_GetCost();
 	int Item_GetDMG();

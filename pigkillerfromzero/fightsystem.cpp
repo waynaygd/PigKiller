@@ -486,7 +486,7 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
                 GP_AsciiRenderer.RenderBattleScene(BuildPigTeamForRender(player), BuildWolfTeamForRender(level));
                 std::cout << "Your gang: " << std::endl;
                 for (int i = 0; i < player.Player_GetPTSize(); i++) {
-                    std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | Weapon: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                    std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
                 }
 
                 std::cout << std::endl;
@@ -506,7 +506,7 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
 
                     std::cout << "Wolf gang: " << std::endl;
                     for (int i = 0; i < level->Level_GetWolfTeamSize(); i++) {
-                        std::cout << i + 1 << ". " << level->Level_GetTeamBot(i)->Character_GetName() << " [" << level->Level_GetTeamBot(i)->Character_GetCHP() << "/" << level->Level_GetTeamBot(i)->Character_GetHP() << "] | Weapon: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage: " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                        std::cout << i + 1 << ". " << level->Level_GetTeamBot(i)->Character_GetName() << " [" << level->Level_GetTeamBot(i)->Character_GetCHP() << "/" << level->Level_GetTeamBot(i)->Character_GetHP() << "] | " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
                     }
 
                     std::cout << std::endl;
@@ -674,7 +674,7 @@ void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
             std::cout << "You also get " << level->Level_GetEXP() << " experience points that can be used to upgrade your pigs" << std::endl << std::endl;
             std::cout << "New members joined your team: " << std::endl;
             for (int i = -2 + (level->Level_GetID() * 2); i < player.Player_GetAvailableSize(); i++) {
-                std::cout << player.Player_GetAvailableBot(i)->Character_GetName() << " / HP: " << player.Player_GetAvailableBot(i)->Character_GetHP() << " / Weapon in inventory: " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetName() << " with damage " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetDMG() << std::endl;
+                std::cout << player.Player_GetAvailableBot(i)->Character_GetName() << " / HP: " << player.Player_GetAvailableBot(i)->Character_GetHP() << " / " << player.Player_GetAvailableBot(i)->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
             }
 
             player.Player_AddToBalance(coins[0]);

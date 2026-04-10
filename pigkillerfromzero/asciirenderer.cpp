@@ -98,7 +98,7 @@ std::string BuildFighterLine(CP_CharacterBase* Fighter, int Index)
 
     std::string WeaponLabel = "No weapon";
     if (Weapon != nullptr) {
-        WeaponLabel = Weapon->Item_GetName() + " (" + std::to_string(Weapon->Item_GetDMG()) + " DMG)";
+        WeaponLabel = Weapon->Item_GetCombatLabel();
     }
 
     std::ostringstream Out;

@@ -15,6 +15,11 @@ std::string CP_ItemBase::Item_GetClass()
     return Item_Class;
 }
 
+std::string CP_ItemBase::Item_GetCombatLabel()
+{
+    return Item_Name + " [" + std::to_string(Item_DMG) + " DMG \\ " + Item_Description + "]";
+}
+
 int CP_ItemBase::Item_GetID()
 {
     return Item_ID;
