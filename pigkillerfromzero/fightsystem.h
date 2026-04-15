@@ -10,6 +10,7 @@ void CP_RanGenMoney();
 class FightSystem {
 public:
 	void FS_StartFight(CP_Player& player, CP_LevelBase* level);
+	bool FS_StartSkirmish(CP_Player& player, CP_LevelBase* level);
 	void FS_AttackByPig(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC, int type_dmg);
 	void FS_FightUI(CP_Player& player, CP_LevelBase* level);
 	void FS_AttackByWolf(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC);
@@ -27,4 +28,6 @@ protected:
 	bool FS_BotTeamWin = false;
 	bool FS_PlayerTeamWin = false;
 	int FS_PlayerAbilityPoints = 2;
+	bool FS_SkirmishMode = false;
+	bool FS_SkirmishResult = false;
 };
