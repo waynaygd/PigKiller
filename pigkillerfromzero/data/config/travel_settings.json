@@ -1,0 +1,6 @@
+{
+  "travel_cooldown_seconds": 3,
+  "ambush_chance_percent": 30,
+  "ambush_max_enemies": 2,
+  "ambush_max_enemy_tier": 1
+}

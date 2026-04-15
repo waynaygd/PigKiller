@@ -1,12 +1,149 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <thread>
+#include <chrono>
+#include <random>
+#include <cstdlib>
 #include "travelsystem.h"
+#include "fightsystem.h"
 #include "shop.h"
 #include "asciirenderer.h"
 #include "consoleutils.h"
+#include "allitems.h"
 
 std::vector <CP_LevelBase*> Level = { new CP_LevelPigBase, new CP_LevelKabak, new CP_LevelShop, new CP_LevelBank, new CP_LevelWolfBase };
 CP_Shop Shop;
+
+namespace {
+struct TravelConfig {
+    int CooldownSeconds = 3;
+    int AmbushChancePercent = 25;
+    int AmbushMaxEnemies = 2;
+    int AmbushMaxEnemyTier = 1;
+};
+
+std::vector<std::string> GetTravelConfigRoots()
+{
+    std::vector<std::string> Roots;
+    Roots.push_back("data/config");
+    Roots.push_back("pigkillerfromzero/data/config");
+    Roots.push_back("../data/config");
+    Roots.push_back("../pigkillerfromzero/data/config");
+    Roots.push_back("../../data/config");
+    Roots.push_back("../../pigkillerfromzero/data/config");
+    return Roots;
+}
+
+std::string JoinPath(const std::string& Left, const std::string& Right)
+{
+    if (Left.empty()) {
+        return Right;
+    }
+
+    const char LastChar = Left[Left.size() - 1];
+    if (LastChar == '/' || LastChar == '\\') {
+        return Left + Right;
+    }
+
+    return Left + "/" + Right;
+}
+
+int ParseIntForKey(const std::string& JsonText, const std::string& Key, int DefaultValue)
+{
+    const std::string QuotedKey = "\"" + Key + "\"";
+    const std::size_t KeyPos = JsonText.find(QuotedKey);
+    if (KeyPos == std::string::npos) {
+        return DefaultValue;
+    }
+
+    const std::size_t ColonPos = JsonText.find(':', KeyPos);
+    if (ColonPos == std::string::npos) {
+        return DefaultValue;
+    }
+
+    std::size_t ValueStart = ColonPos + 1;
+    while (ValueStart < JsonText.size() && (JsonText[ValueStart] == ' ' || JsonText[ValueStart] == '\n' || JsonText[ValueStart] == '\r' || JsonText[ValueStart] == '\t')) {
+        ValueStart++;
+    }
+
+    bool IsNegative = false;
+    if (ValueStart < JsonText.size() && JsonText[ValueStart] == '-') {
+        IsNegative = true;
+        ValueStart++;
+    }
+
+    std::size_t ValueEnd = ValueStart;
+    while (ValueEnd < JsonText.size() && JsonText[ValueEnd] >= '0' && JsonText[ValueEnd] <= '9') {
+        ValueEnd++;
+    }
+
+    if (ValueEnd == ValueStart) {
+        return DefaultValue;
+    }
+
+    const int Parsed = std::atoi(JsonText.substr(ValueStart, ValueEnd - ValueStart).c_str());
+    if (IsNegative) {
+        return -Parsed;
+    }
+    return Parsed;
+}
+
+const TravelConfig& GetTravelConfig()
+{
+    static TravelConfig Config;
+    static bool IsLoaded = false;
+    if (IsLoaded) {
+        return Config;
+    }
+
+    const std::vector<std::string> Roots = GetTravelConfigRoots();
+    for (std::size_t i = 0; i < Roots.size(); i++) {
+        std::ifstream Input(JoinPath(Roots[i], "travel_settings.json").c_str());
+        if (!Input.is_open()) {
+            continue;
+        }
+
+        std::ostringstream Buffer;
+        Buffer << Input.rdbuf();
+        const std::string JsonText = Buffer.str();
+
+        Config.CooldownSeconds = ParseIntForKey(JsonText, "travel_cooldown_seconds", Config.CooldownSeconds);
+        Config.AmbushChancePercent = ParseIntForKey(JsonText, "ambush_chance_percent", Config.AmbushChancePercent);
+        Config.AmbushMaxEnemies = ParseIntForKey(JsonText, "ambush_max_enemies", Config.AmbushMaxEnemies);
+        Config.AmbushMaxEnemyTier = ParseIntForKey(JsonText, "ambush_max_enemy_tier", Config.AmbushMaxEnemyTier);
+        break;
+    }
+
+    if (Config.CooldownSeconds < 0) Config.CooldownSeconds = 0;
+    if (Config.AmbushChancePercent < 0) Config.AmbushChancePercent = 0;
+    if (Config.AmbushChancePercent > 100) Config.AmbushChancePercent = 100;
+    if (Config.AmbushMaxEnemies < 1) Config.AmbushMaxEnemies = 1;
+    if (Config.AmbushMaxEnemies > 2) Config.AmbushMaxEnemies = 2;
+    if (Config.AmbushMaxEnemyTier < 0) Config.AmbushMaxEnemyTier = 0;
+    if (Config.AmbushMaxEnemyTier > 1) Config.AmbushMaxEnemyTier = 1;
+
+    IsLoaded = true;
+    return Config;
+}
+
+CP_CharacterBase* CreateAmbushWolfByTier(int MaxTier)
+{
+    static std::mt19937 Rng(std::random_device{}());
+    std::uniform_int_distribution<int> Dist(0, MaxTier);
+    const int Tier = Dist(Rng);
+    if (Tier == 0) {
+        CP_CharacterBase* Wolf = new CP_WolfDefault;
+        Wolf->Character_AddToInventory(new CP_ItemSword);
+        return Wolf;
+    }
+
+    CP_CharacterBase* Wolf = new CP_WolfPro;
+    Wolf->Character_AddToInventory(new CP_ItemAxe);
+    return Wolf;
+}
+} // namespace
 
 void TravelSystem::TS_ShowAllLevels()
 {
@@ -63,6 +200,10 @@ void TravelSystem::TS_UITravel(CP_Player& player)
             TS_UITravel(player);
         }
         else {
+            if (TS_ProcessTravelRisks(player) == false) {
+                P_BackToPigBase();
+                return;
+            }
             TS_TravelToLevel(player, Level[P_LevelChoosed]);
         }
     }
@@ -91,6 +232,42 @@ void TravelSystem::TS_UITravel(CP_Player& player)
             TS_UITravel(player);
         }
     }
+}
+
+bool TravelSystem::TS_ProcessTravelRisks(CP_Player& player)
+{
+    const TravelConfig& Config = GetTravelConfig();
+
+    if (Config.CooldownSeconds > 0) {
+        std::cout << "Travel started..." << std::endl;
+        for (int i = Config.CooldownSeconds; i > 0; i--) {
+            std::cout << "Arriving in " << i << " sec..." << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    }
+
+    static std::mt19937 Rng(std::random_device{}());
+    std::uniform_int_distribution<int> ChanceDist(1, 100);
+    const int Roll = ChanceDist(Rng);
+    if (Roll > Config.AmbushChancePercent) {
+        return true;
+    }
+
+    std::uniform_int_distribution<int> CountDist(1, Config.AmbushMaxEnemies);
+    const int EnemyCount = CountDist(Rng);
+
+    CP_LevelBase AmbushLevel(-1, 0, EnemyCount, 0, "Road Ambush", "A small wolf gang attacks during travel", false, false);
+    for (int i = 0; i < EnemyCount; i++) {
+        AmbushLevel.Level_AddWolfToVector(CreateAmbushWolfByTier(Config.AmbushMaxEnemyTier));
+    }
+
+    system("cls");
+    std::cout << "<- Pig Killer ->" << std::endl << std::endl;
+    std::cout << "Ambush! A wolf gang attacks your team on the road." << std::endl;
+    CP_PauseForContinue();
+
+    FightSystem TravelFight;
+    return TravelFight.FS_StartSkirmish(player, &AmbushLevel);
 }
 
 bool TravelSystem::TS_CanPBTravel(CP_Player& player, CP_LevelBase* level)

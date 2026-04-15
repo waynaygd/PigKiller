@@ -286,6 +286,15 @@ void FightSystem::FS_StartFight(CP_Player& player, CP_LevelBase* level)
     }
 }
 
+bool FightSystem::FS_StartSkirmish(CP_Player& player, CP_LevelBase* level)
+{
+    FS_SkirmishMode = true;
+    FS_SkirmishResult = false;
+    FS_StartFight(player, level);
+    FS_SkirmishMode = false;
+    return FS_SkirmishResult;
+}
+
 void FightSystem::FS_AttackByPig(CP_Player& player, CP_LevelBase* level, int CP_PigC, int CP_WolfC, int type_dmg)
 {
     if (level->Level_GetTeamBot(CP_WolfC)->Character_GetIsAlive() == true) {
@@ -584,6 +593,32 @@ void FightSystem::FS_CheckBotTeamIsDead(CP_LevelBase* level)
 
 void FightSystem::FS_BattleEnds(CP_Player& player, CP_LevelBase* level)
 {
+    if (FS_SkirmishMode == true) {
+        system("cls");
+        std::cout << "<- Pig Killer ->" << std::endl << std::endl;
+        if (FS_PlayerTeamWin == true) {
+            std::cout << "You survived the road ambush and scared the wolves away!" << std::endl;
+            FS_SkirmishResult = true;
+        }
+        else {
+            std::cout << "The ambush was too strong. You retreat back to base." << std::endl;
+            FS_SkirmishResult = false;
+        }
+
+        FS_PlayerTeamWin = false;
+        FS_BotTeamWin = false;
+        player.Player_SetTurn(false);
+        level->Level_WolfTeamClear();
+        CP_PauseForContinue();
+        system("cls");
+
+        for (int i = 0; i < player.Player_GetPTSize(); i++) {
+            player.Player_GetTeamBot(i)->Character_SetCHP(player.Player_GetTeamBot(i)->Character_GetHP());
+            player.Player_GetTeamBot(i)->Character_SetIsAlive(true);
+        }
+        return;
+    }
+
     if (FS_PlayerTeamWin == true) {
         if (level->Level_GetName() == "Wolf Base") {
             P_GameEnding();
