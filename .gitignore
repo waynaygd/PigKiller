@@ -1,6 +1,16 @@
 # Prerequisites
 *.d
 
+# Visual Studio cache
+.vs/
+
+# Build outputs
+[Bb]uild/
+x64/
+Debug/
+Release/
+out/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -10,6 +20,13 @@
 # Precompiled Headers
 *.gch
 *.pch
+
+# Visual Studio specific
+*.suo
+*.VC.db
+*.idb
+*.tlog
+*.vsidx
 
 # Linker files
 *.ilk
