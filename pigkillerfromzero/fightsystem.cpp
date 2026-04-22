@@ -493,13 +493,9 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
                 system("cls");
                 std::cout << "<- Pig Killer ->" << std::endl << std::endl;
                 GP_AsciiRenderer.RenderBattleScene(BuildPigTeamForRender(player), BuildWolfTeamForRender(level));
-                std::cout << "Your gang: " << std::endl;
-                for (int i = 0; i < player.Player_GetPTSize(); i++) {
-                    std::cout << i + 1 << ". " << player.Player_GetTeamBot(i)->Character_GetName() << " [" << player.Player_GetTeamBot(i)->Character_GetCHP() << "/" << player.Player_GetTeamBot(i)->Character_GetHP() << "] | " << player.Player_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
-                }
 
                 std::cout << std::endl;
-                std::cout << "Choose a pig to attack an enemy wolf: ";
+                std::cout << "Choose a pig number from the PLAYER GANG list above: ";
                 std::cin >> player_choice;
 
                 while (player.Player_GetTeamBot(player_choice - 1)->Character_GetIsAlive() == false) {
@@ -513,13 +509,8 @@ void FightSystem::FS_FightUI(CP_Player& player, CP_LevelBase* level)
                     std::cout << "<- Pig Killer ->" << std::endl << std::endl;
                     GP_AsciiRenderer.RenderBattleScene(BuildPigTeamForRender(player), BuildWolfTeamForRender(level), player_choice - 1, -1);
 
-                    std::cout << "Wolf gang: " << std::endl;
-                    for (int i = 0; i < level->Level_GetWolfTeamSize(); i++) {
-                        std::cout << i + 1 << ". " << level->Level_GetTeamBot(i)->Character_GetName() << " [" << level->Level_GetTeamBot(i)->Character_GetCHP() << "/" << level->Level_GetTeamBot(i)->Character_GetHP() << "] | " << level->Level_GetTeamBot(i)->Character_GetItemFINV(0)->Item_GetCombatLabel() << std::endl;
-                    }
-
                     std::cout << std::endl;
-                    std::cout << "Choose a wolf to attack: ";
+                    std::cout << "Choose a wolf number from the ENEMY GANG list above to attack: ";
                     std::cin >> player_wolf_choice;
                     std::cout << std::endl;
 

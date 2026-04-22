@@ -132,16 +132,19 @@ void game() {
 	}
 
 	for (int i = 0; i < Player.Player_GetPTSize(); i++) {
-		if (massive_id[i] == 1) {
+		switch (massive_id[i]) {
+		case 1:
 			Player.Player_GetTeamBot(i)->Character_AddToInventory(new CP_ItemSword);
-		}
-		if (massive_id[i] == 2) {
+			break;
+		case 2:
 			Player.Player_GetTeamBot(i)->Character_AddToInventory(new CP_ItemBulava);
-		}
-		if (massive_id[i] == 3) {
+			break;
+		case 3:
 			Player.Player_GetTeamBot(i)->Character_AddToInventory(new CP_ItemSekira);
+			break;
 		}
 	}
+
 	GP_Travel.TS_TravelToLevel(Player, GP_Travel.TS_GetLevel(1));
 	GP_Travel.TS_GetLevel(Player.Player_GetCurrentLocation())->Level_Gameplay();
 	GP_Fight.FS_StartFight(Player, GP_Travel.TS_GetLevel(Player.Player_GetCurrentLocation())); 
